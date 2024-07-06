@@ -1,62 +1,226 @@
-body {
-    background-color: #1c1c1c;
-    color: #fff;
-    font-family: Arial, sans-serif;
+* {
+    padding: 0;
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background: #1A1A1C;
+}
+
+#main {
+    /* border: 2px solid red; */
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 100vh;
-    margin: 10px;
+    gap: 20px;
+    /* margin-top: 100px; */
+    padding: 100px 0px;
+    /* margin: 100px 340px; */
+    background: #1A1A1C;
 }
 
-.container {
-    width: 80%;
+#search-area {
+    /* width: 100%; */
+    height: 40px;
+    /* border: 2px solid red; */
+    display: flex;
+    gap: 25px;
+    justify-content: flex-start;
+    background: #1A1A1C;
+    
 }
 
-input {
-    padding: 10px;
-    margin: 5px;
-    border: 2px solid white;
-    width: 400px;
-    background-color: #000;
-    color: #fff;
-
+#search-bar {
+    width: 445px;
+    display: flex;
+    align-items: center;
+    /* border: 1px solid red; */
+    border: 1px solid #8E8E8E;
 }
 
-button {
-    padding: 10px 20px;
-    margin: 10px;
-    border-radius: 5px;
-    border: 2px solid white;
-    background-color: #000;
-    color: #fff;
-    cursor: pointer;
-}
 
-table {
+#search {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+    color: #FFF;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    border: none;
+    outline: none;
+    
+   
+}
+#search::placeholder{
+    padding-left: 20px;
+    color: white;
+}
+
+#search-area>button {
+    width:200px;
+    /* padding: 0px 15px; */
+    border: 1px solid #8E8E8E;
+    color: #FFF;
+    font-family: Inter;
+    /* font-size: 14px; */
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+}
+
+#search-area>button:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+#hero {
+    /* border: 1px solid red; */
+    background: #1A1A1C;
+}
+
+#hero>table {
+    /* border: 1px solid red; */
+    color: #FFF;
+    /* background: #1A1A1C; */
+    border-collapse:separate;
+    border-spacing: 30px 20px;
+}
+
+tr {
+    height: 20px;
+    /* border: 1px solid red; */
+}
+/* tr::after{
+    /* border: 1px solid red; 
+ */
+td>img {
+    height: 20px;
+    width: 20px;
 }
 
 td {
-    padding: 10px;
-    text-align: left;
-    background-color: #000;
-    border-bottom: 1px solid #fff;
+    color: #FFF;
+    /* background: #1A1A1C; */
+    height: 70px;
+    width: max-content;
+   
 }
 
-.positive {
-    color: #0f0; /* Green for positive percentage */
+td:hover{
+    font-size: large;
 }
 
-.negative {
-    color: #f00; /* Red for negative percentage */
+/* hr{
+    background-color: white;
+    width: 100%;
+} */
+
+td:hover{
+    cursor: pointer;
 }
 
-.coin-image {
-    width: 24px;
-    height: 24px;
-    vertical-align: middle;
-    margin-right: 10px;
+/* .table-col{
+    border: 1px solid red;
+} */
+.row1 {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 0px 10px;
 }
+.row2{
+    text-align: center;
+    padding: 0px 10px;
+}
+.common-row{
+    text-align: right;
+}
+.positive-change{
+    color:#58b53b;
+}
+.negative-change{
+    color:#ba2c21;
+}
+
+/* --------------------------------------------------------------- */
+@media screen and (max-width: 780px) {
+    /* Styles for Mobile (Up to 780px) */
+  
+    #search-area {
+      flex-direction: row;
+      gap: 10px;
+      
+    }
+  
+    #search-bar,
+    #search-area > button {
+      width: 40%;
+      margin-bottom: 10px;
+    }
+  
+    #hero > table {
+      border-spacing: 10px; /* Adjust spacing for smaller screens */
+      font-size: 10px;
+      width: 100%;
+    }
+  
+    td {
+      padding: 5px 8px;
+    }
+  }
+  
+
+
+  @media screen and (max-width: 928px) {
+    /* Styles for Mobile (Up to 928px) */
+  
+    #search-area {
+      flex-direction: row;
+      gap: 10px;
+      
+    }
+  
+    #search-bar,
+    #search-area > button {
+      width: 40%;
+      margin-bottom: 10px;
+    }
+  
+    #hero > table {
+      border-spacing: 10px; /* Adjust spacing for smaller screens */
+      font-size: 15px;
+      width: 100%;
+    }
+  
+    td {
+      padding: 10px 8px;
+    }
+  }
+  
+
+  @media screen and (max-width: 766px) {
+    /* Styles for Mobile (Up to 766px) */
+  
+    #search-area {
+      flex-direction: row;
+      gap: 10px;
+      
+    }
+  
+    #search-bar,
+    #search-area > button {
+      width: 40%;
+      margin-bottom: 10px;
+    }
+  
+    #hero > table {
+      border-spacing: 10px; /* Adjust spacing for smaller screens */
+      font-size: 10px;
+      width: 100%;
+    }
+  
+    td {
+      padding: 5px 8px;
+    }
+  }
