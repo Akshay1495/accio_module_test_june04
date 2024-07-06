@@ -1,73 +1,82 @@
-const apiUrl = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false';
+const table_body = document.querySelectorAll("#hero>table")[0];
+const sortPercentage = document.getElementById("sortByPercentage");
+const sortMktcap = document.getElementById("sortByCap");
+const search_btn = document.getElementById("search");
+let data;
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetchDataWithThen();
-    document.getElementById('search').addEventListener('input', searchHandler);
-    document.getElementById('sortByMktCap').addEventListener('click', () => sortTable('market_cap'));
-    document.getElementById('sortByPercentage').addEventListener('click', () => sortTable('price_change_percentage_24h'));
-});
-
-// Fetch data using .then
-function fetchDataWithThen() {
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => renderTable(data))
-        .catch(error => console.error('Error fetching data with then:', error));
-}
-
-// Fetch data using async/await
-async function fetchDataWithAsyncAwait() {
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        renderTable(data);
-    } catch (error) {
-        console.error('Error fetching data with async/await:', error);
+function createrow(data) {
+    table_body.innerHTML = ``;
+    for (let el of data) {
+        const tr = document.createElement("tr");
+        console.log(el.market_cap_change_percentage_24h.toString().includes("-"));
+        if (!el.market_cap_change_percentage_24h.toString().includes("-")) {
+            tr.innerHTML = `
+                <td class="row1"><img src=${el.image} alt=${el.name}>${el.name}</td>
+                <td class="row2">${el.symbol.toUpperCase()}</td>
+                <td class="common-row">$${el.current_price}</td>
+                <td class="common-row">$${el.total_volume}</td>
+                <td class="common-row positive-change">${el.market_cap_change_percentage_24h}%</td>
+                <td class="common-row last-row">Mkt Cap : $${el.market_cap}</td>
+                `;
+        }
+        else {
+            tr.innerHTML = `
+                <td class="row1"><img src=${el.image} alt=${el.name}>${el.name}</td>
+                <td class="row2">${el.symbol.toUpperCase()}</td>
+                <td class="common-row">$${el.current_price}</td>
+                <td class="common-row">$${el.total_volume}</td>
+                <td class="common-row negative-change">${el.market_cap_change_percentage_24h}%</td>
+                <td class="common-row last-row">Mkt Cap : $${el.market_cap}</td>
+                `;
+        }
+        table_body.appendChild(tr);
     }
 }
 
-// Render data in the table
-function renderTable(data) {
-    const tableBody = document.querySelector('#cryptoTable tbody');
-    tableBody.innerHTML = '';
-    data.forEach(coin => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td><img src="${coin.image}" alt="${coin.name}" class="coin-image">${coin.name}</td>
-            <td>${coin.symbol.toUpperCase()}</td>
-            <td>$${coin.current_price.toLocaleString()}</td>
-            <td>$${coin.total_volume.toLocaleString()}</td>
-            <td class="${coin.price_change_percentage_24h >= 0 ? 'positive' : 'negative'}">
-                ${coin.price_change_percentage_24h.toFixed(2)}%
-            </td>
-            <td>$${coin.market_cap.toLocaleString()}</td>
-        `;
-        tableBody.appendChild(row);
-    });
+async function generateOutput() {
+    try {
+        const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false");
+        data = await response.json();
+        createrow(data);
+    } catch (error) {
+        console.log(error);
+    }
 }
-
-// Search and filter the data
-function searchHandler(event) {
-    const searchValue = event.target.value.toLowerCase();
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            const filteredData = data.filter(coin => 
-                coin.name.toLowerCase().includes(searchValue) || 
-                coin.symbol.toLowerCase().includes(searchValue)
-            );
-            renderTable(filteredData);
-        })
-        .catch(error => console.error('Error during search:', error));
+sortPercentage.addEventListener("click", () => {
+    let new_data = data.sort((a, b) => {
+        return a.market_cap_change_percentage_24h - b.market_cap_change_percentage_24h;
+    })
+    createrow(new_data);
+})
+sortMktcap.addEventListener("click", () => {
+    let new_data = data.sort((a, b) => {
+        return a.market_cap - b.market_cap;
+    })
+    createrow(new_data);
+})
+function debounce(func, timeout = 300) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            func.apply(this, args);
+        }, timeout);
+    }
 }
-
-// Sort the table based on the provided key
-function sortTable(key) {
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            data.sort((a, b) => b[key] - a[key]);
-            renderTable(data);
-        })
-        .catch(error => console.error('Error during sort:', error));
+function searchfn(event) {
+    console.log(event.target.value);
+    let new_data = data;
+    try {
+        new_data = data.filter((el) => {
+            return el.id.includes(event.target.value) || el.name.includes(event.target.value);
+        });
+    } catch (error) {
+        console.log(error);
+    }
+    createrow(new_data);
 }
+const searchStart = debounce((event) => {
+    searchfn(event);
+})
+search_btn.addEventListener("keyup", searchStart);
+generateOutput();
